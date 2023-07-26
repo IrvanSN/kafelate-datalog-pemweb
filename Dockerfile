@@ -13,4 +13,6 @@ RUN a2enmod rewrite
 
 RUN chown -R www-data:www-data /var/www/html/public/uploads
 
+USER www-data
+
 EXPOSE 80
