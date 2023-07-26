@@ -1,0 +1,11 @@
+“w” – Opens a file for write only. If file not exist then new file is created and
+if file already exists then contents of file is erased.
+“r” – File is opened for read only.
+“a” – File is opened for write only. File pointer points to end of file. Existing
+data in file is preserved.
+“w+” – Opens file for read and write. If file not exist then new file is created
+and if file already exists then contents of file is erased.
+“r+” – File is opened for read/write.
+“a+” – File is opened for write/read. File pointer points to end of file.
+Existing data in file is preserved. If file is not there then new file is created.
+“x” – New file is created for write only.
