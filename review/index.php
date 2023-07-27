@@ -1,3 +1,20 @@
+<?php
+    $servername = "mysql.duakaryadigital.com";
+    $username = "root";
+    $password = "123hore";
+    $dbname = "new_katalog_app";
+
+    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+   
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    $sql = "SELECT * FROM review;";
+
+    $stmt = $conn->prepare($sql);
+
+    $stmt->execute();
+    $review = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -122,27 +139,12 @@
                 <div
                     class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
                 >
-                    <!-- Testimonial Card 1 -->
-                    <div
-                        class="bg-black text-white font-playfair rounded-lg shadow-md p-6"
-                    >
-                        <div class="flex items-start mb-4">
-                            <div>
-                                <h4
-                                    class="text-secondary-500 font-bold text-lg"
-                                >
-                                    Hernandez
-                                </h4>
-                                <p class="text-white">
-                                    Hidangan yang luar biasa, pelayanan ramah,
-                                    dan suasana nyaman. Pengalaman makan yang
-                                    sempurna!
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+                    <?php
+                    if (count($review) > 0) {
+                        $counter_review = 1;
 
-                    <!-- Testimonial Card 2 -->
+                        foreach ($review as $row_review) {
+                    ?>
                     <div
                         class="bg-black text-white font-playfair rounded-lg shadow-md p-6"
                     >
@@ -151,64 +153,52 @@
                                 <h4
                                     class="text-secondary-500 font-bold text-lg"
                                 >
-                                    Chika
+                                    <?php echo $row_review['nama'] ?>
                                 </h4>
                                 <p class="text-white">
-                                    Kafe favorit untuk santai dan menikmati kopi
-                                    lezat. Suasana tenang dan dekorasi menawan.
+                                    <?php echo $row_review['deskripsi'] ?>
                                 </p>
                             </div>
                         </div>
                     </div>
-
-                    <!-- Testimonial Card 3 -->
-                    <div
-                        class="bg-black text-white font-playfair rounded-lg shadow-md p-6"
-                    >
-                        <div class="flex items-start mb-4">
-                            <div>
-                                <h4
-                                    class="text-secondary-500 font-bold text-lg"
-                                >
-                                    Deo
-                                </h4>
-                                <p class="text-white">
-                                    Makan malam yang luar biasa, hidangan indah
-                                    dan rasa yang tak terlupakan. Pelayanan
-                                    cepat dan profesional.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+                    <?php
+                            $counter_review++;
+                        }
+                    } else {
+                        echo "<tr><td colspan='9' class='py-4 px-6 text-sm font-medium text-gray-800 whitespace-nowrap' style='font-size: 18px'>No data available.</td></tr>";
+                    }
+                    ?>
                 </div>
             </section>
             <section class="container mx-auto px-4 py-8">
                 <h2 class="text-3xl font-bold mb-6">Tambahkan Ulasan</h2>
                 <form
                     id="testimonialForm"
+                    method="POST"
+                    action="/review/action.php"
                     class="flex flex-col gap-4 w-full text-black"
                 >
                     <div class="flex flex-col">
-                        <label for="name" class="text-white text-xl font-bold"
+                        <label for="nama" class="text-white text-xl font-bold"
                             >Nama</label
                         >
                         <input
                             type="text"
-                            id="name"
-                            name="name"
+                            id="nama"
+                            name="nama"
                             class="px-4 py-2 border border-gray-400 rounded-md"
                             required
                         />
                     </div>
                     <div class="flex flex-col">
                         <label
-                            for="testimonial"
+                            for="deskripsi"
                             class="text-white text-xl font-bold"
                             >Ulasan</label
                         >
                         <textarea
-                            id="testimonial"
-                            name="testimonial"
+                            id="deskripsi"
+                            name="deskripsi"
                             class="px-4 py-2 border border-gray-400 rounded-md"
                             required
                         ></textarea>
