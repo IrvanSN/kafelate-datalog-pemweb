@@ -154,7 +154,7 @@ function formatIDRCurrency($amount) {
                 <div id="category-header-<?php echo $row_kategori['id_kategori'] ?>" class="flex justify-between">
                     <div class="font-playfair font-bold text-2xl"><?php echo $row_kategori['nama_kategori'] ?></div>
                     <a
-                        href="./category?id=<?php echo $row_kategori['id_kategori'] ?>"
+                        href="/menu/category?id=<?php echo $row_kategori['id_kategori'] ?>&nama=<?php echo $row_kategori['nama_kategori'] ?>"
                         class="font-playfair px-4 py-2 bg-secondary-700 hover:bg-secondary-900 transition duration-500 ease-in-out"
                         >Lihat Semua</a
                     >
@@ -231,7 +231,7 @@ function formatIDRCurrency($amount) {
                     ?>
                 </div>
                 <a
-                    href="./category?id=<?php echo $row_kategori['id_kategori'] ?>"
+                    href="/menu/category?id=<?php echo $row_kategori['id_kategori'] ?>&nama=<?php echo $row_kategori['nama_kategori'] ?>"
                     class="flex flex-col p-2 bg-secondary-700 text-center w-full font-playfair transition duration-500 hover:bg-secondary-900 ease-out md:hidden"
                 >
                     <span class="font-bold">Lihat Semua</span>

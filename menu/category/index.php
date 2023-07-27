@@ -1,5 +1,6 @@
 <?php
     $id_kategori=$_GET['id'];
+    $nama_kategori=$_GET['nama']
 ?>
 <?php
     $servername = "mysql.duakaryadigital.com";
@@ -144,7 +145,7 @@ function formatIDRCurrency($amount) {
         <div class="flex flex-col pt-16 gap-2">
             <div class="flex flex-col p-8 md:p-16 gap-2">
                 <h1 class="text-4xl font-playfair text-center font-bold">
-                    Minuman
+                    <?php echo $nama_kategori ?>
                 </h1>
                 <p class="font-playfair text-xl text-center">
                     Cari ketenangan dengan menu kami.

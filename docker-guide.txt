@@ -1,5 +1,6 @@
 docker volume create datalog-uploads
 
+docker build -t kafelate-datalog .
 docker stop kafelate-datalog
 docker rm kafelate-datalog
 docker run -d --name kafelate-datalog -p 3100:80 -v datalog-uploads:/var/www/html/public/uploads kafelate-datalog
