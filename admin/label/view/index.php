@@ -67,7 +67,7 @@ $selected = "label";
                 </div>
             </div>
             <div class="h-auto bg-gray-200 p-2 flex justify-end">
-                <button type="button" class="px-3 py-2 rounded-md border border-red-500 text-red-500 mr-2 text-sm hover:bg-red-500 hover:text-white transition duration-200"><a href="/admin/label/view/delete.php?id_label=<?php echo $row['id_label'] ?>&nama_label=<?php echo $row['nama_label'] ?>">Hapus Kategori</a></button>
+                <button id="hapusLabelBtn" type="button" class="px-3 py-2 rounded-md border border-red-500 text-red-500 mr-2 text-sm hover:bg-red-500 hover:text-white transition duration-200">Hapus Label</button>
                 <button type="submit" class="bg-gray-700 px-3 py-2 rounded-md hover:bg-gray-900 hover:shadow-md text-white transition text-sm">Ubah Data</button>
             </div>
         </form>
@@ -85,6 +85,20 @@ $selected = "label";
     </div>
 </div>
 
+<script>
+    function confirmDelete() {
+        var result = confirm("Apakah Anda yakin ingin menghapus label ini?");
+        if (result) {
+            var id_label = <?php echo $id_label ?>;
+            var nama_label = <?php echo json_encode($row['nama_label']); ?>;
+            var deleteUrl = "/admin/label/view/delete.php?id_label=" + id_label + "&nama_label=" + encodeURIComponent(nama_label);
+            window.location.href = deleteUrl;
+        }
+    }
+
+    var hapusKategoriBtn = document.getElementById("hapusLabelBtn");
+    hapusKategoriBtn.addEventListener("click", confirmDelete);
+</script>
 
 </body>
 <?php include '../../../parts/script.php';?>

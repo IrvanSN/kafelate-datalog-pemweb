@@ -157,7 +157,7 @@ $selected = "produk";
             </div>
 
             <div class="h-auto bg-gray-200 p-2 flex justify-end">
-              <button type="button" class="px-3 py-2 rounded-md border border-red-500 text-red-500 mr-2 text-sm hover:bg-red-500 hover:text-white transition duration-200"><a href="/admin/product/view/delete.php?id_produk=<?php echo $id_produk ?>&nama_produk=<?php echo $nama_produk ?>">Hapus Produk</a></button>
+              <button id="hapusProdukBtn" type="button" class="px-3 py-2 rounded-md border border-red-500 text-red-500 mr-2 text-sm hover:bg-red-500 hover:text-white transition duration-200">Hapus Produk</button>
               <button type="submit" class="bg-gray-700 px-3 py-2 rounded-md hover:bg-gray-900 hover:shadow-md text-white transition text-sm">Ubah Data</button>
             </div>
         </form>
@@ -168,6 +168,19 @@ $selected = "produk";
     </div>
 </div>
  
+<script>
+    function confirmDelete() {
+        var result = confirm("Apakah Anda yakin ingin menghapus produk ini?");
+        if (result) {
+            var id_produk = <?php echo $id_produk ?>;
+            var nama_produk = <?php echo json_encode($nama_produk); ?>;
+            var deleteUrl = "/admin/product/view/delete.php?id_produk=" + id_produk + "&nama_produk=" + encodeURIComponent(nama_produk);
+            window.location.href = deleteUrl;
+        }
+    }
 
+    var hapusProdukBtn = document.getElementById("hapusProdukBtn");
+    hapusProdukBtn.addEventListener("click", confirmDelete);
+</script>
 </body>
 <?php include '../../../parts/script.php';?>

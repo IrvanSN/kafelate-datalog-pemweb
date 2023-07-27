@@ -94,6 +94,38 @@ INSERT INTO `produk` (`id_kategori`, `id_label`, `nama`, `deskripsi`, `status`, 
 (5, 3, 'Americano', 'Espresso yang ditambah air panas, rasa lebih ringan dari espresso', 1, 50, 'americano.jpg', 30000),
 (5, 1, 'Flat White', 'Kopi dengan campuran espresso dan susu panas, lebih ringan dari Cappuccino', 1, 40, 'flat_white.jpg', 35000);
 
+-- Insert data dummy ke dalam tabel `produk` untuk kategori 'Specials'
+INSERT INTO `produk` (`id_kategori`, `id_label`, `nama`, `deskripsi`, `status`, `stok`, `foto`, `harga`) VALUES
+(6, 2, 'Chef Special Pasta', 'Pasta spesial dari chef dengan saus ala italia', 1, 20, 'chef_special_pasta.jpg', 85000),
+(6, 1, 'Special Grilled Steak', 'Steak daging sapi spesial dengan saus istimewa', 1, 15, 'special_grilled_steak.jpg', 150000),
+(6, 3, 'Chef’s Special Pizza', 'Pizza ukuran besar dengan topping spesial dari chef', 1, 10, 'chef_special_pizza.jpg', 90000),
+(6, 1, 'Special Seafood Platter', 'Pilihan laut terbaik dengan saus spesial', 1, 8, 'special_seafood_platter.jpg', 170000),
+(6, 2, 'Special Vegetarian Stir Fry', 'Sayuran tumis spesial dengan bumbu istimewa', 1, 30, 'special_vegetarian_stir_fry.jpg', 70000);
+
+-- Insert data dummy ke dalam tabel `produk` untuk kategori 'Kids Menu'
+INSERT INTO `produk` (`id_kategori`, `id_label`, `nama`, `deskripsi`, `status`, `stok`, `foto`, `harga`) VALUES
+(7, 2, 'Chicken Fingers', 'Potongan ayam goreng yang renyah', 1, 40, 'chicken_fingers.jpg', 40000),
+(7, 1, 'Kids Spaghetti', 'Spaghetti dengan saus tomat', 1, 30, 'kids_spaghetti.jpg', 50000),
+(7, 3, 'Mini Burger', 'Burger ukuran mini dengan kentang goreng', 1, 50, 'mini_burger.jpg', 55000),
+(7, 1, 'Fish & Chips', 'Potongan ikan goreng dengan kentang goreng', 1, 30, 'fish_chips.jpg', 50000),
+(7, 2, 'Kids Pizza', 'Pizza kecil dengan topping keju dan sosis', 1, 35, 'kids_pizza.jpg', 60000);
+
+-- Insert data dummy ke dalam tabel `produk` untuk kategori 'Vegetarian'
+INSERT INTO `produk` (`id_kategori`, `id_label`, `nama`, `deskripsi`, `status`, `stok`, `foto`, `harga`) VALUES
+(8, 1, 'Veggie Burger', 'Burger dengan patty sayuran', 1, 30, 'veggie_burger.jpg', 70000),
+(8, 2, 'Vegan Pizza', 'Pizza dengan topping sayuran segar dan keju vegan', 1, 20, 'vegan_pizza.jpg', 75000),
+(8, 3, 'Vegetable Pasta', 'Pasta dengan saus tomat dan sayuran segar', 1, 25, 'vegetable_pasta.jpg', 65000),
+(8, 1, 'Salad Bowl', 'Salad segar dengan sayuran organik', 1, 40, 'salad_bowl.jpg', 50000),
+(8, 2, 'Vegetarian Sushi', 'Sushi dengan isian sayuran segar', 1, 30, 'vegetarian_sushi.jpg', 70000);
+
+-- Insert data dummy ke dalam tabel `produk` untuk produk kopi
+INSERT INTO `produk` (`id_kategori`, `id_label`, `nama`, `deskripsi`, `status`, `stok`, `foto`, `harga`) VALUES
+(5, 2, 'Espresso Double Shot', 'Espresso dengan dua shot untuk rasa kopi yang lebih kuat', 1, 20, 'espresso_double.jpg', 40000),
+(5, 3, 'Iced Americano', 'Versi dingin dari Americano, lebih segar dan mantap', 1, 30, 'iced_americano.jpg', 35000),
+(5, 1, 'Coffee Latte Art', 'Latte dengan seni latte di atasnya, cocok untuk Instagram', 1, 25, 'coffee_latte_art.jpg', 40000),
+(5, 1, 'Caramel Macchiato', 'Espresso dengan susu dan sirup karamel', 1, 20, 'caramel_macchiato.jpg', 45000),
+(5, 2, 'Vietnamese Drip Coffee', 'Kopi tetes Vietnam dengan susu kental manis', 1, 30, 'vietnamese_drip.jpg', 50000);
+
 
 CREATE TABLE `review` (
   `id_review` int NOT NULL AUTO_INCREMENT,
@@ -113,3 +145,4 @@ INSERT INTO `review` (`nama`, `deskripsi`) VALUES
 ('Hans', 'Tempat yang sempurna untuk hang out, cinta suasana dan musiknya.'),
 ('Irene', 'Saya suka menu anak-anaknya, anak saya sangat menikmati makan di sini.'),
 ('Jason', 'Harga makanannya sepadan dengan rasanya, saya akan kembali lagi.');
+

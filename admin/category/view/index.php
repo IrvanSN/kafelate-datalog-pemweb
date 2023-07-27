@@ -68,7 +68,7 @@ $selected = "kategori";
                 </div>
             </div>
             <div class="h-auto bg-gray-200 p-2 flex justify-end">
-                <button type="button" class="px-3 py-2 rounded-md border border-red-500 text-red-500 mr-2 text-sm hover:bg-red-500 hover:text-white transition duration-200"><a href="/admin/category/view/delete.php?id_kategori=<?php echo $row['id_kategori'] ?>&nama_kategori=<?php echo $row['nama_kategori'] ?>">Hapus Kategori</a></button>
+                <button id="hapusKategoriBtn" type="button" class="px-3 py-2 rounded-md border border-red-500 text-red-500 mr-2 text-sm hover:bg-red-500 hover:text-white transition duration-200">Hapus Kategori</button>
                 <button type="submit" class="bg-gray-700 px-3 py-2 rounded-md hover:bg-gray-900 hover:shadow-md text-white transition text-sm">Ubah Data</button>
             </div>
         </form>
@@ -86,6 +86,20 @@ $selected = "kategori";
     </div>
 </div>
 
+<script>
+    function confirmDelete() {
+        var result = confirm("Apakah Anda yakin ingin menghapus kategori ini?");
+        if (result) {
+            var id_kategori = <?php echo $id_kategori ?>;
+            var nama_kategori = <?php echo json_encode($row['nama_kategori']); ?>;
+            var deleteUrl = "/admin/category/view/delete.php?id_kategori=" + id_kategori + "&nama_kategori=" + encodeURIComponent(nama_kategori);
+            window.location.href = deleteUrl;
+        }
+    }
+
+    var hapusKategoriBtn = document.getElementById("hapusKategoriBtn");
+    hapusKategoriBtn.addEventListener("click", confirmDelete);
+</script>
 
 </body>
 <?php include '../../../parts/script.php';?>

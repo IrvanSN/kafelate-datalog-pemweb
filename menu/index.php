@@ -1,3 +1,26 @@
+<?php
+    $servername = "mysql.duakaryadigital.com";
+    $username = "root";
+    $password = "123hore";
+    $dbname = "new_katalog_app";
+
+    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+   
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    $sql = "SELECT * FROM kategori;";
+
+    $stmt = $conn->prepare($sql);
+
+    $stmt->execute();
+    $kategori = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
+<?php
+function formatIDRCurrency($amount) {
+    $formatted_amount = number_format($amount, 0, ',', '.');
+    return 'Rp ' . $formatted_amount;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -117,20 +140,47 @@
                     Cari ketenangan dengan menu kami.
                 </p>
             </div>
+            <?php
+            if (count($kategori) > 0) {
+                $counter = 1;
+
+                foreach ($kategori as $row_kategori) {
+            ?>
             <!-- Per Category -->
             <div
-                id="category"
+                id="category-<?php echo $row_kategori['id_kategori'] ?>"
                 class="flex flex-col gap-2.5 pt-0 md:pt-0 p-8 md:p-16"
             >
-                <div id="category-header" class="flex justify-between">
-                    <div class="font-playfair font-bold text-2xl">Minuman</div>
+                <div id="category-header-<?php echo $row_kategori['id_kategori'] ?>" class="flex justify-between">
+                    <div class="font-playfair font-bold text-2xl"><?php echo $row_kategori['nama_kategori'] ?></div>
                     <a
-                        href="./category/minuman/"
+                        href="./category?id=<?php echo $row_kategori['id_kategori'] ?>"
                         class="font-playfair px-4 py-2 bg-secondary-700 hover:bg-secondary-900 transition duration-500 ease-in-out"
                         >Lihat Semua</a
                     >
                 </div>
                 <div id="menu-list" class="flex flex-col md:flex-row gap-2">
+                    <?php
+                    $sql = "SELECT p.foto, p.deskripsi, p.id_produk, p.nama AS nama_produk, IFNULL(k.nama_kategori, 'Tidak Ada') AS nama_kategori, IFNULL(l.nama_label, 'Tidak Ada') AS nama_label, p.stok, p.status, p.harga
+                    FROM produk p
+                    LEFT JOIN kategori k ON p.id_kategori = k.id_kategori
+                    LEFT JOIN label l ON p.id_label = l.id_label
+                    WHERE k.id_kategori=?
+                    LIMIT 4;";
+
+                    $stmt = $conn->prepare($sql);
+
+                    $stmt->bindValue(1, $row_kategori['id_kategori'], PDO::PARAM_STR);
+                
+                    $stmt->execute();
+                    $produk = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    ?>
+                    <?php
+                    if (count($produk) > 0) {
+                        $counter_produk = 1;
+
+                        foreach ($produk as $row_produk) {
+                    ?>
                     <div
                         class="flex flex-row md:flex-col p-4 bg-black w-full md:w-fit gap-4"
                     >
@@ -139,7 +189,7 @@
                         >
                             <img
                                 class="object-cover w-full h-full"
-                                src="./asset/img/background.jpg"
+                                src="/public/uploads/<?php echo $row_produk['foto'] ?>"
                                 alt=""
                             />
                         </div>
@@ -149,343 +199,53 @@
                                     <div
                                         class="font-playfair text-xl font-bold"
                                     >
-                                        Es Jeruk
+                                        <?php echo $row_produk['nama_produk'] ?>
                                     </div>
                                     <div
                                         class="flex bg-secondary-500 font-playfair px-2 py-1 rounded-full text-xs items-center h-fit w-fit text-center justify-center"
                                     >
-                                        Rekomendasi
+                                        <?php echo $row_produk['nama_label'] ?>
                                     </div>
                                 </div>
-                                <p>Jeruk dengan es</p>
+                                <p><?php echo $row_produk['deskripsi'] ?></p>
                             </div>
                             <div
                                 class="flex h-full items-end font-poppins text-secondary-400 gap-2"
                             >
-                                <div class="text-xl font-bold">Rp5.000</div>
-                                <div class="text-sm">5 Tersisa!</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div
-                        class="flex flex-row md:flex-col p-4 bg-black w-full md:w-fit gap-4"
-                    >
-                        <div
-                            class="flex shrink-0 items-center justify-center text-center font-bold text-gray-500 w-32 h-32 md:w-64 md:h-64 bg-white"
-                        >
-                            <img
-                                class="object-cover w-full h-full"
-                                src="./asset/img/background.jpg"
-                                alt=""
-                            />
-                        </div>
-                        <div class="flex flex-col w-full">
-                            <div class="font-playfair text-xl">
-                                <div class="flex gap-3 justify-between">
-                                    <div
-                                        class="font-playfair text-xl font-bold"
-                                    >
-                                        Es Jeruk
-                                    </div>
-                                    <div
-                                        class="flex bg-secondary-500 font-playfair px-2 py-1 rounded-full text-xs items-center justify-center h-fit w-fit text-center"
-                                    >
-                                        Rekomendasi
-                                    </div>
+                                <div class="text-xl font-bold"><?php echo formatIDRCurrency($row_produk['harga']); ?></div>
+                                <div class="text-sm">
+                                    <?php 
+                                    $printRemainingStock = $row_produk['stok'] <= 10 ? $row_produk['stok'] . " Tersisa!" : "";
+                                    echo $printRemainingStock;
+                                    ?>
                                 </div>
-                                <p>Jeruk dengan es</p>
-                            </div>
-                            <div
-                                class="flex h-full items-end font-poppins text-secondary-400 gap-2"
-                            >
-                                <div class="text-xl font-bold">Rp5.000</div>
-                                <div class="text-sm">5 Tersisa!</div>
                             </div>
                         </div>
                     </div>
-                    <div
-                        class="flex flex-row md:flex-col p-4 bg-black w-full md:w-fit gap-4"
-                    >
-                        <div
-                            class="flex shrink-0 items-center justify-center text-center font-bold text-gray-500 w-32 h-32 md:w-64 md:h-64 bg-white"
-                        >
-                            <img
-                                class="object-cover w-full h-full"
-                                src="./asset/img/background.jpg"
-                                alt=""
-                            />
-                        </div>
-                        <div class="flex flex-col w-full">
-                            <div class="font-playfair text-xl">
-                                <div class="flex gap-3 justify-between">
-                                    <div
-                                        class="font-playfair text-xl font-bold"
-                                    >
-                                        Es Teh
-                                    </div>
-                                    <div
-                                        class="flex bg-secondary-500 font-playfair px-2 py-1 rounded-full text-xs items-center justify-center h-fit w-fit text-center"
-                                    >
-                                        Paling Laku
-                                    </div>
-                                </div>
-                                <p>Jeruk dengan es</p>
-                            </div>
-                            <div
-                                class="flex h-full items-end font-poppins text-secondary-400 gap-2"
-                            >
-                                <div class="text-xl font-bold">Rp5.000</div>
-                                <div class="text-sm">5 Tersisa!</div>
-                            </div>
-                        </div>
-                    </div>
+                    <?php
+                            $counter_produk++;
+                        }
+                    } else {
+                        echo "<tr><td colspan='9' class='py-4 px-6 text-sm font-medium text-gray-800 whitespace-nowrap' style='font-size: 18px'>No data available.</td></tr>";
+                    }
+                    ?>
                 </div>
                 <a
-                    href="./category/minuman/"
+                    href="./category?id=<?php echo $row_kategori['id_kategori'] ?>"
                     class="flex flex-col p-2 bg-secondary-700 text-center w-full font-playfair transition duration-500 hover:bg-secondary-900 ease-out md:hidden"
                 >
                     <span class="font-bold">Lihat Semua</span>
-                    <span class="">Kategori Minuman</span>
+                    <span class="">Kategori <?php echo $row_kategori['nama_kategori'] ?></span>
                 </a>
             </div>
             <!-- Category End -->
-            <!-- Per Category -->
-            <div
-                id="category"
-                class="flex flex-col gap-2.5 pt-0 md:pt-0 p-8 md:p-16"
-            >
-                <div id="category-header" class="flex justify-between">
-                    <div class="font-playfair font-bold text-2xl">Makanan</div>
-                    <a
-                        href="#"
-                        class="font-playfair px-4 py-2 bg-secondary-700 hover:bg-secondary-900 transition duration-500 ease-in-out"
-                        >Lihat Semua</a
-                    >
-                </div>
-                <div id="menu-list" class="flex flex-col md:flex-row gap-2">
-                    <div
-                        class="flex flex-row md:flex-col p-4 bg-black w-full md:w-fit gap-4"
-                    >
-                        <div
-                            class="flex shrink-0 items-center justify-center text-center font-bold text-gray-500 w-32 h-32 md:w-64 md:h-64 bg-white"
-                        >
-                            <img
-                                class="object-cover w-full h-full"
-                                src="./asset/img/background.jpg"
-                                alt=""
-                            />
-                        </div>
-                        <div class="flex flex-col w-full">
-                            <div class="font-playfair text-xl">
-                                <div class="flex gap-3 justify-between">
-                                    <div
-                                        class="font-playfair text-xl font-bold"
-                                    >
-                                        Mie Ayam
-                                    </div>
-                                </div>
-                                <p>Mie dengan ayam</p>
-                            </div>
-                            <div
-                                class="flex h-full items-end font-poppins text-secondary-400 gap-2"
-                            >
-                                <div class="text-xl font-bold">Rp10.000</div>
-                                <div class="text-sm">Tersedia</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <a
-                    href="#"
-                    class="flex flex-col p-2 bg-secondary-700 text-center w-full font-playfair transition duration-500 hover:bg-secondary-900 ease-out md:hidden"
-                >
-                    <span class="font-bold">Lihat Semua</span>
-                    <span class="">Kategori Makanan</span>
-                </a>
-            </div>
-            <!-- Category End -->
-            <!-- Per Category -->
-            <div
-                id="category"
-                class="flex flex-col gap-2.5 pt-0 md:pt-0 p-8 md:p-16"
-            >
-                <div id="category-header" class="flex justify-between">
-                    <div class="font-playfair font-bold text-2xl">Snack</div>
-                    <a
-                        href="#"
-                        class="font-playfair px-4 py-2 bg-secondary-700 hover:bg-secondary-900 transition duration-500 ease-in-out"
-                        >Lihat Semua</a
-                    >
-                </div>
-                <div id="menu-list" class="flex flex-col md:flex-row gap-2">
-                    <div
-                        class="flex flex-row md:flex-col p-4 bg-black w-full md:w-fit gap-4"
-                    >
-                        <div
-                            class="flex shrink-0 items-center justify-center text-center font-bold text-gray-500 w-32 h-32 md:w-64 md:h-64 bg-white"
-                        >
-                            <img
-                                class="object-cover w-full h-full"
-                                src="./asset/img/background.jpg"
-                                alt=""
-                            />
-                        </div>
-                        <div class="flex flex-col w-full">
-                            <div class="font-playfair text-xl">
-                                <div class="flex gap-3 justify-between">
-                                    <div
-                                        class="font-playfair text-xl font-bold"
-                                    >
-                                        Kebab Supreme
-                                    </div>
-                                    <div
-                                        class="flex bg-secondary-500 font-playfair px-2 py-1 rounded-full text-xs items-center justify-center h-fit w-fit text-center"
-                                    >
-                                        Paket Hemat
-                                    </div>
-                                </div>
-                                <p>Kebab dengan daging sapi</p>
-                            </div>
-                            <div
-                                class="flex h-full items-end font-poppins text-secondary-400 gap-2"
-                            >
-                                <div class="text-xl font-bold">Rp19.000</div>
-                                <div class="text-sm">8 Tersisa!</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div
-                        class="flex flex-row md:flex-col p-4 bg-black w-full md:w-fit gap-4"
-                    >
-                        <div
-                            class="flex shrink-0 items-center justify-center text-center font-bold text-gray-500 w-32 h-32 md:w-64 md:h-64 bg-white"
-                        >
-                            <img
-                                class="object-cover w-full h-full"
-                                src="./asset/img/background.jpg"
-                                alt=""
-                            />
-                        </div>
-                        <div class="flex flex-col w-full">
-                            <div class="font-playfair text-xl">
-                                <div class="flex gap-3 justify-between">
-                                    <div
-                                        class="font-playfair text-xl font-bold"
-                                    >
-                                        Roti Bakar
-                                    </div>
-                                    <div
-                                        class="flex bg-secondary-500 font-playfair px-2 py-1 rounded-full text-xs items-center justify-center h-fit w-fit text-center"
-                                    >
-                                        Paket Hemat
-                                    </div>
-                                </div>
-                                <p>Roti dibakar</p>
-                            </div>
-                            <div
-                                class="flex h-full items-end font-poppins text-secondary-400 gap-2"
-                            >
-                                <div class="text-xl font-bold">Rp8.000</div>
-                                <div class="text-sm">7 Tersisa!</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <a
-                    href="#"
-                    class="flex flex-col p-2 bg-secondary-700 text-center w-full font-playfair transition duration-500 hover:bg-secondary-900 ease-out md:hidden"
-                >
-                    <span class="font-bold">Lihat Semua</span>
-                    <span class="">Kategori Snack</span>
-                </a>
-            </div>
-            <!-- Category End -->
-            <!-- Per Category -->
-            <div
-                id="category"
-                class="flex flex-col gap-2.5 pt-0 md:pt-0 p-8 md:p-16"
-            >
-                <div id="category-header" class="flex justify-between">
-                    <div class="font-playfair font-bold text-2xl">Dessert</div>
-                    <a
-                        href="#"
-                        class="font-playfair px-4 py-2 bg-secondary-700 hover:bg-secondary-900 transition duration-500 ease-in-out"
-                        >Lihat Semua</a
-                    >
-                </div>
-                <div id="menu-list" class="flex flex-col md:flex-row gap-2">
-                    <div
-                        class="flex flex-row md:flex-col p-4 bg-black w-full md:w-fit gap-4"
-                    >
-                        <div
-                            class="flex shrink-0 items-center justify-center text-center font-bold text-gray-500 w-32 h-32 md:w-64 md:h-64 bg-white"
-                        >
-                            <img
-                                class="object-cover w-full h-full"
-                                src="./asset/img/background.jpg"
-                                alt=""
-                            />
-                        </div>
-                        <div class="flex flex-col w-full">
-                            <div class="font-playfair text-xl">
-                                <div class="flex gap-3 justify-between">
-                                    <div
-                                        class="font-playfair text-xl font-bold"
-                                    >
-                                        Es Campur
-                                    </div>
-                                </div>
-                                <p>Es nya dicampur</p>
-                            </div>
-                            <div
-                                class="flex h-full items-end font-poppins text-secondary-400 gap-2"
-                            >
-                                <div class="text-xl font-bold">Rp12.000</div>
-                                <div class="text-sm">7 Tersisa!</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div
-                        class="flex flex-row md:flex-col p-4 bg-black w-full md:w-fit gap-4"
-                    >
-                        <div
-                            class="flex shrink-0 items-center justify-center text-center font-bold text-gray-500 w-32 h-32 md:w-64 md:h-64 bg-white"
-                        >
-                            <img
-                                class="object-cover w-full h-full"
-                                src="./asset/img/background.jpg"
-                                alt=""
-                            />
-                        </div>
-                        <div class="flex flex-col w-full">
-                            <div class="font-playfair text-xl">
-                                <div class="flex gap-3 justify-between">
-                                    <div
-                                        class="font-playfair text-xl font-bold"
-                                    >
-                                        Palu Butung
-                                    </div>
-                                </div>
-                                <p>REs pisang dibalut ijo ijo</p>
-                            </div>
-                            <div
-                                class="flex h-full items-end font-poppins text-secondary-400 gap-2"
-                            >
-                                <div class="text-xl font-bold">Rp12.000</div>
-                                <div class="text-sm">7 Tersisa!</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <a
-                    href="#"
-                    class="flex flex-col p-2 bg-secondary-700 text-center w-full font-playfair transition duration-500 hover:bg-secondary-900 ease-out md:hidden"
-                >
-                    <span class="font-bold">Lihat Semua</span>
-                    <span class="">Kategori Dessert</span>
-                </a>
-            </div>
-            <!-- Category End -->
+            <?php
+                    $counter++;
+                }
+            } else {
+                echo "<tr><td colspan='9' class='py-4 px-6 text-sm font-medium text-gray-800 whitespace-nowrap' style='font-size: 18px'>No data available.</td></tr>";
+            }
+            ?>
         </div>
         <!-- Footer Section -->
 <footer class="bg-black py-6 text-white">

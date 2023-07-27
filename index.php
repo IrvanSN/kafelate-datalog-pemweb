@@ -192,7 +192,7 @@ function formatIDRCurrency($amount) {
 
                 <div class="flex mt-5 gap-2 justify-center items-center">
                     <button
-                        id="scrollLeftBtn"
+                        id="scrollLeftBtn-<?php echo $counter ?>"
                         class="p-4 w-fit h-fit rounded-full bg-secondary-300 text-white font-bold hidden md:block"
                     >
                         <svg
@@ -211,7 +211,7 @@ function formatIDRCurrency($amount) {
                         </svg>
                     </button>
                     <div
-                        id="choice"
+                        id="choice-<?php echo $counter ?>"
                         class="flex flex-wrap md:flex-nowrap w-full whitespace-nowrap md:flex-row mt-5 gap-5 items-center flex-no-wrap overflow-hidden scrolling-touch"
                     >
                     <?php
@@ -228,7 +228,7 @@ function formatIDRCurrency($amount) {
 
                             foreach ($produk as $row_produk) {
                         ?>
-                        <div class="shadow bg-black card">
+                        <div class="shadow bg-black card-<?php echo $counter ?>">
                             <div class="md:w-64 md:h-64 bg-gray-500">
                                 <img
                                     class="object-cover w-full h-full aspect-square"
@@ -259,7 +259,7 @@ function formatIDRCurrency($amount) {
                         ?>
                     </div>
                     <button
-                        id="scrollRightBtn"
+                        id="scrollRightBtn-<?php echo $counter ?>"
                         class="p-4 w-fit h-fit rounded-full bg-secondary-300 text-white font-bold hidden md:block"
                     >
                         <svg
@@ -281,6 +281,37 @@ function formatIDRCurrency($amount) {
             </div>
             <div id="select-<?php echo $counter; ?>">
             </div>
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    const cardsContainer = document.getElementById('choice-<?php echo $counter ?>');
+                    const cards = document.querySelectorAll('.card-<?php echo $counter ?>');
+                    const cardWidth = cards[0].offsetWidth;
+                    const gap = 20;
+
+                    let scrollLeft = cardWidth + gap;
+
+                    document
+                        .getElementById('scrollLeftBtn-<?php echo $counter ?>')
+                        .addEventListener('click', () => {
+                            scrollLeft -= cardWidth + gap;
+                            cardsContainer.scrollTo({
+                                left: scrollLeft,
+                                behavior: 'smooth',
+                            });
+                        });
+
+                    document
+                        .getElementById('scrollRightBtn-<?php echo $counter ?>')
+                        .addEventListener('click', () => {
+                            scrollLeft += cardWidth + gap;
+                            cardsContainer.scrollTo({
+                                left: scrollLeft,
+                                behavior: 'smooth',
+                            });
+                        });
+                });
+            </script>
+
             <?php
                     $counter++;
                 }
@@ -288,236 +319,6 @@ function formatIDRCurrency($amount) {
                 echo "No data available.";
             }
             ?>
-            <!-- <div class="flex flex-col p-16">
-                <div class="text-3xl font-playfair font-bold text-center">
-                    <span class="text-secondary-300">Best Selller</span> Kami
-                </div>
-
-                <div class="flex mt-5 gap-2 justify-center items-center">
-                    <button
-                        id="scrollLeftBtn"
-                        class="p-4 w-fit h-fit rounded-full bg-secondary-300 text-white font-bold hidden md:block"
-                    >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke-width="1.5"
-                            stroke="currentColor"
-                            class="w-6 h-6"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="M15.75 19.5L8.25 12l7.5-7.5"
-                            />
-                        </svg>
-                    </button>
-                    <div
-                        id="choice"
-                        class="flex flex-wrap md:flex-nowrap w-full whitespace-nowrap md:flex-row mt-5 gap-5 items-center flex-no-wrap overflow-hidden scrolling-touch"
-                    >
-                        <div class="shadow bg-black card">
-                            <div class="md:w-64 md:h-64 bg-gray-500">
-                                <img
-                                    class="object-cover w-full h-full aspect-square"
-                                    src="./asset/img/background.jpg"
-                                    alt=""
-                                />
-                            </div>
-                            <div class="p-4">
-                                <h5
-                                    class="text-xl font-playfair font-bold tracking-tight text-white"
-                                >
-                                    Arabica Coffee
-                                </h5>
-                                <p
-                                    class="mt-2 text-lg font-bold text-secondary-400"
-                                >
-                                    Rp15.000
-                                </p>
-                            </div>
-                        </div>
-                        <div class="shadow bg-black card">
-                            <div class="md:w-64 md:h-64 bg-gray-500">
-                                <img
-                                    class="object-cover w-full h-full aspect-square"
-                                    src="./asset/img/background.jpg"
-                                    alt=""
-                                />
-                            </div>
-                            <div class="p-4">
-                                <h5
-                                    class="text-xl font-playfair font-bold tracking-tight text-white"
-                                >
-                                    Arabica Coffee
-                                </h5>
-                                <p
-                                    class="mt-2 text-lg font-bold text-secondary-400"
-                                >
-                                    Rp15.000
-                                </p>
-                            </div>
-                        </div>
-                        <div class="shadow bg-black card">
-                            <div class="md:w-64 md:h-64 bg-gray-500">
-                                <img
-                                    class="object-cover w-full h-full aspect-square"
-                                    src="./asset/img/background.jpg"
-                                    alt=""
-                                />
-                            </div>
-                            <div class="p-4">
-                                <h5
-                                    class="text-xl font-playfair font-bold tracking-tight text-white"
-                                >
-                                    Arabica Coffee
-                                </h5>
-                                <p
-                                    class="mt-2 text-lg font-bold text-secondary-400"
-                                >
-                                    Rp15.000
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <button
-                        id="scrollRightBtn"
-                        class="p-4 w-fit h-fit rounded-full bg-secondary-300 text-white font-bold hidden md:block"
-                    >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke-width="1.5"
-                            stroke="currentColor"
-                            class="w-6 h-6"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="M8.25 4.5l7.5 7.5-7.5 7.5"
-                            />
-                        </svg>
-                    </button>
-                </div>
-            </div>
-            <div id="select-2">
-            </div>
-            <div class="flex flex-col p-16">
-                <div class="text-3xl font-playfair font-bold text-center">
-                    Paket <span class="text-secondary-300">Hemat</span>
-                </div>
-
-                <div class="flex mt-5 gap-2 justify-center items-center">
-                    <button
-                        id="scrollLeftBtn"
-                        class="p-4 w-fit h-fit rounded-full bg-secondary-300 text-white font-bold hidden md:block"
-                    >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke-width="1.5"
-                            stroke="currentColor"
-                            class="w-6 h-6"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="M15.75 19.5L8.25 12l7.5-7.5"
-                            />
-                        </svg>
-                    </button>
-                    <div
-                        id="choice"
-                        class="flex flex-wrap md:flex-nowrap w-full whitespace-nowrap md:flex-row mt-5 gap-5 items-center flex-no-wrap overflow-hidden scrolling-touch"
-                    >
-                        <div class="shadow bg-black card">
-                            <div class="md:w-64 md:h-64 bg-gray-500">
-                                <img
-                                    class="object-cover w-full h-full aspect-square"
-                                    src="./asset/img/background.jpg"
-                                    alt=""
-                                />
-                            </div>
-                            <div class="p-4">
-                                <h5
-                                    class="text-xl font-playfair font-bold tracking-tight text-white"
-                                >
-                                    Arabica Coffee
-                                </h5>
-                                <p
-                                    class="mt-2 text-lg font-bold text-secondary-400"
-                                >
-                                    Rp15.000
-                                </p>
-                            </div>
-                        </div>
-                        <div class="shadow bg-black card">
-                            <div class="md:w-64 md:h-64 bg-gray-500">
-                                <img
-                                    class="object-cover w-full h-full aspect-square"
-                                    src="./asset/img/background.jpg"
-                                    alt=""
-                                />
-                            </div>
-                            <div class="p-4">
-                                <h5
-                                    class="text-xl font-playfair font-bold tracking-tight text-white"
-                                >
-                                    Arabica Coffee
-                                </h5>
-                                <p
-                                    class="mt-2 text-lg font-bold text-secondary-400"
-                                >
-                                    Rp15.000
-                                </p>
-                            </div>
-                        </div>
-                        <div class="shadow bg-black card">
-                            <div class="md:w-64 md:h-64 bg-gray-500">
-                                <img
-                                    class="object-cover w-full h-full aspect-square"
-                                    src="./asset/img/background.jpg"
-                                    alt=""
-                                />
-                            </div>
-                            <div class="p-4">
-                                <h5
-                                    class="text-xl font-playfair font-bold tracking-tight text-white"
-                                >
-                                    Arabica Coffee
-                                </h5>
-                                <p
-                                    class="mt-2 text-lg font-bold text-secondary-400"
-                                >
-                                    Rp15.000
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <button
-                        id="scrollRightBtn"
-                        class="p-4 w-fit h-fit rounded-full bg-secondary-300 text-white font-bold hidden md:block"
-                    >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke-width="1.5"
-                            stroke="currentColor"
-                            class="w-6 h-6"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="M8.25 4.5l7.5 7.5-7.5 7.5"
-                            />
-                        </svg>
-                    </button>
-                </div>
-            </div> -->
         </div>
         <!-- Footer Section -->
         <footer class="bg-black py-6 text-white">
@@ -655,32 +456,5 @@ function formatIDRCurrency($amount) {
             </div>
         </div>
         `
-
-        const cardsContainer = document.getElementById('choice');
-        const cards = document.querySelectorAll('.card');
-        const cardWidth = cards[0].offsetWidth;
-        const gap = 20;
-
-        let scrollLeft = cardWidth + gap;
-
-        document
-            .getElementById('scrollLeftBtn')
-            .addEventListener('click', () => {
-                scrollLeft -= cardWidth + gap;
-                cardsContainer.scrollTo({
-                    left: scrollLeft,
-                    behavior: 'smooth',
-                });
-            });
-
-        document
-            .getElementById('scrollRightBtn')
-            .addEventListener('click', () => {
-                scrollLeft += cardWidth + gap;
-                cardsContainer.scrollTo({
-                    left: scrollLeft,
-                    behavior: 'smooth',
-                });
-            });
     </script>
 </html>

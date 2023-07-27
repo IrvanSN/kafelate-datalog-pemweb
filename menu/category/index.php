@@ -1,3 +1,35 @@
+<?php
+    $id_kategori=$_GET['id'];
+?>
+<?php
+    $servername = "mysql.duakaryadigital.com";
+    $username = "root";
+    $password = "123hore";
+    $dbname = "new_katalog_app";
+
+    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+   
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    $sql = "SELECT p.foto, p.deskripsi, p.id_produk, p.nama AS nama_produk, IFNULL(k.nama_kategori, 'Tidak Ada') AS nama_kategori, IFNULL(l.nama_label, 'Tidak Ada') AS nama_label, p.stok, p.status, p.harga
+    FROM produk p
+    LEFT JOIN kategori k ON p.id_kategori = k.id_kategori
+    LEFT JOIN label l ON p.id_label = l.id_label
+    WHERE k.id_kategori=?;";
+
+    $stmt = $conn->prepare($sql);
+
+    $stmt->bindValue(1, $id_kategori, PDO::PARAM_STR);
+
+    $stmt->execute();
+    $produk = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
+<?php
+function formatIDRCurrency($amount) {
+    $formatted_amount = number_format($amount, 0, ',', '.');
+    return 'Rp ' . $formatted_amount;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -124,12 +156,18 @@
                 class="flex flex-col gap-2.5 pt-0 md:pt-0 p-8 md:p-16"
             >
                 <a
-                    href="/menu.html"
+                    href="/menu"
                     class="bg-secondary-700 md:w-fit text-white px-4 py-2 hover:bg-secondary-900 transition duration-300"
                 >
                     Kembali ke Menu
                 </a>
                 <div id="menu-list" class="flex flex-wrap gap-2">
+                    <?php
+                    if (count($produk) > 0) {
+                        $counter_produk = 1;
+
+                        foreach ($produk as $row_produk) {
+                    ?>
                     <div
                         class="flex flex-row md:flex-col p-4 bg-black w-full md:w-fit gap-4"
                     >
@@ -138,7 +176,7 @@
                         >
                             <img
                                 class="object-cover w-full h-full"
-                                src="/asset/img/background.jpg"
+                                src="/public/uploads/<?php echo $row_produk['foto'] ?>"
                                 alt=""
                             />
                         </div>
@@ -148,168 +186,36 @@
                                     <div
                                         class="font-playfair text-xl font-bold"
                                     >
-                                        Es Jeruk
+                                        <?php echo $row_produk['nama_produk'] ?>
                                     </div>
                                     <div
                                         class="flex bg-secondary-500 font-playfair px-2 py-1 rounded-full text-xs items-center h-fit w-fit text-center justify-center"
                                     >
-                                        Rekomendasi
+                                        <?php echo $row_produk['nama_label'] ?>
                                     </div>
                                 </div>
-                                <p>Jeruk dengan es</p>
+                                <p><?php echo $row_produk['deskripsi'] ?></p>
                             </div>
                             <div
                                 class="flex h-full items-end font-poppins text-secondary-400 gap-2"
                             >
-                                <div class="text-xl font-bold">Rp5.000</div>
-                                <div class="text-sm">5 Tersisa!</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div
-                        class="flex flex-row md:flex-col p-4 bg-black w-full md:w-fit gap-4"
-                    >
-                        <div
-                            class="flex shrink-0 items-center justify-center text-center font-bold text-gray-500 w-32 h-32 md:w-64 md:h-64 bg-white"
-                        >
-                            <img
-                                class="object-cover w-full h-full"
-                                src="/asset/img/background.jpg"
-                                alt=""
-                            />
-                        </div>
-                        <div class="flex flex-col w-full">
-                            <div class="font-playfair text-xl">
-                                <div class="flex gap-2">
-                                    <div
-                                        class="font-playfair text-xl font-bold"
-                                    >
-                                        Es Jeruk
-                                    </div>
-                                    <div
-                                        class="flex bg-secondary-500 font-playfair px-2 py-1 rounded-full text-xs items-center h-fit w-fit text-center justify-center"
-                                    >
-                                        Rekomendasi
-                                    </div>
+                                <div class="text-xl font-bold"><?php echo formatIDRCurrency($row_produk['harga']); ?></div>
+                                <div class="text-sm">
+                                    <?php 
+                                    $printRemainingStock = $row_produk['stok'] <= 10 ? $row_produk['stok'] . " Tersisa!" : "";
+                                    echo $printRemainingStock;
+                                    ?>
                                 </div>
-                                <p>Jeruk dengan es</p>
-                            </div>
-                            <div
-                                class="flex h-full items-end font-poppins text-secondary-400 gap-2"
-                            >
-                                <div class="text-xl font-bold">Rp5.000</div>
-                                <div class="text-sm">5 Tersisa!</div>
                             </div>
                         </div>
                     </div>
-                    <div
-                        class="flex flex-row md:flex-col p-4 bg-black w-full md:w-fit gap-4"
-                    >
-                        <div
-                            class="flex shrink-0 items-center justify-center text-center font-bold text-gray-500 w-32 h-32 md:w-64 md:h-64 bg-white"
-                        >
-                            <img
-                                class="object-cover w-full h-full"
-                                src="/asset/img/background.jpg"
-                                alt=""
-                            />
-                        </div>
-                        <div class="flex flex-col w-full">
-                            <div class="font-playfair text-xl">
-                                <div class="flex gap-2">
-                                    <div
-                                        class="font-playfair text-xl font-bold"
-                                    >
-                                        Es Jeruk
-                                    </div>
-                                    <div
-                                        class="flex bg-secondary-500 font-playfair px-2 py-1 rounded-full text-xs items-center h-fit w-fit text-center justify-center"
-                                    >
-                                        Rekomendasi
-                                    </div>
-                                </div>
-                                <p>Jeruk dengan es</p>
-                            </div>
-                            <div
-                                class="flex h-full items-end font-poppins text-secondary-400 gap-2"
-                            >
-                                <div class="text-xl font-bold">Rp5.000</div>
-                                <div class="text-sm">5 Tersisa!</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div
-                        class="flex flex-row md:flex-col p-4 bg-black w-full md:w-fit gap-4"
-                    >
-                        <div
-                            class="flex shrink-0 items-center justify-center text-center font-bold text-gray-500 w-32 h-32 md:w-64 md:h-64 bg-white"
-                        >
-                            <img
-                                class="object-cover w-full h-full"
-                                src="/asset/img/background.jpg"
-                                alt=""
-                            />
-                        </div>
-                        <div class="flex flex-col w-full">
-                            <div class="font-playfair text-xl">
-                                <div class="flex gap-3 justify-between">
-                                    <div
-                                        class="font-playfair text-xl font-bold"
-                                    >
-                                        Es Jeruk
-                                    </div>
-                                    <div
-                                        class="flex bg-secondary-500 font-playfair px-2 py-1 rounded-full text-xs items-center justify-center h-fit w-fit text-center"
-                                    >
-                                        Rekomendasi
-                                    </div>
-                                </div>
-                                <p>Jeruk dengan es</p>
-                            </div>
-                            <div
-                                class="flex h-full items-end font-poppins text-secondary-400 gap-2"
-                            >
-                                <div class="text-xl font-bold">Rp5.000</div>
-                                <div class="text-sm">5 Tersisa!</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div
-                        class="flex flex-row md:flex-col p-4 bg-black w-full md:w-fit gap-4"
-                    >
-                        <div
-                            class="flex shrink-0 items-center justify-center text-center font-bold text-gray-500 w-32 h-32 md:w-64 md:h-64 bg-white"
-                        >
-                            <img
-                                class="object-cover w-full h-full"
-                                src="/asset/img/background.jpg"
-                                alt=""
-                            />
-                        </div>
-                        <div class="flex flex-col w-full">
-                            <div class="font-playfair text-xl">
-                                <div class="flex gap-3 justify-between">
-                                    <div
-                                        class="font-playfair text-xl font-bold"
-                                    >
-                                        Es Teh
-                                    </div>
-                                    <div
-                                        class="flex bg-secondary-500 font-playfair px-2 py-1 rounded-full text-xs items-center justify-center h-fit w-fit text-center"
-                                    >
-                                        Paling Laku
-                                    </div>
-                                </div>
-                                <p>Jeruk dengan es</p>
-                            </div>
-                            <div
-                                class="flex h-full items-end font-poppins text-secondary-400 gap-2"
-                            >
-                                <div class="text-xl font-bold">Rp5.000</div>
-                                <div class="text-sm">5 Tersisa!</div>
-                            </div>
-                        </div>
-                    </div>
+                    <?php
+                            $counter_produk++;
+                        }
+                    } else {
+                        echo "<tr><td colspan='9' class='py-4 px-6 text-sm font-medium text-gray-800 whitespace-nowrap' style='font-size: 18px'>No data available.</td></tr>";
+                    }
+                    ?>
                 </div>
                 <a
                     href="/menu.html"

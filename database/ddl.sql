@@ -16,6 +16,15 @@ LEFT JOIN kategori k ON p.id_kategori = k.id_kategori
 LEFT JOIN label l ON p.id_label = l.id_label
 WHERE id_produk=?;
 
+SELECT p.foto, p.deskripsi, p.id_produk, p.nama AS nama_produk, IFNULL(k.nama_kategori, 'Tidak Ada') AS nama_kategori, IFNULL(l.nama_label, 'Tidak Ada') AS nama_label, p.stok, p.status, p.harga
+FROM produk p
+LEFT JOIN kategori k ON p.id_kategori = k.id_kategori
+LEFT JOIN label l ON p.id_label = l.id_label
+WHERE k.id_kategori=?
+LIMIT 5;
+
+SELECT * FROM produk;
+
 SELECT p.foto, p.id_produk, p.nama AS nama_produk, IFNULL(k.nama_kategori, 'Tidak Ada') AS nama_kategori, IFNULL(l.nama_label, 'Tidak Ada') AS nama_label, p.stok, p.status, p.harga
 FROM produk p
 LEFT JOIN kategori k ON p.id_kategori = k.id_kategori
@@ -54,3 +63,9 @@ SELECT
 SELECT * FROM kategori;
 
 SELECT nama, harga, foto FROM produk WHERE id_label=?;
+
+SELECT* FROM produk;
+
+UPDATE produk
+SET deskripsi = 'Roti panggang dengan topping tomat segar'
+WHERE id_produk=1;
