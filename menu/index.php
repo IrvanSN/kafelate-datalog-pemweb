@@ -193,9 +193,9 @@ function formatIDRCurrency($amount) {
                                 alt=""
                             />
                         </div>
-                        <div class="flex flex-col w-full">
-                            <div class="font-playfair text-xl">
-                                <div class="flex gap-2">
+                        <div class="flex flex-col md:w-64">
+                            <div class="flex flex-col font-playfair">
+                                <div class="flex gap-2 justify-between">
                                     <div
                                         class="font-playfair text-xl font-bold"
                                     >
@@ -207,18 +207,18 @@ function formatIDRCurrency($amount) {
                                         <?php echo $row_produk['nama_label'] ?>
                                     </div>
                                 </div>
-                                <p><?php echo $row_produk['deskripsi'] ?></p>
+                                <p>
+                                    <?php echo $row_produk['deskripsi'] ?>
+                                </p>
                             </div>
                             <div
                                 class="flex h-full items-end font-poppins text-secondary-400 gap-2"
                             >
                                 <div class="text-xl font-bold"><?php echo formatIDRCurrency($row_produk['harga']); ?></div>
-                                <div class="text-sm">
-                                    <?php 
+                                <div class="text-sm"><?php 
                                     $printRemainingStock = $row_produk['stok'] <= 10 ? $row_produk['stok'] . " Tersisa!" : "";
                                     echo $printRemainingStock;
-                                    ?>
-                                </div>
+                                    ?></div>
                             </div>
                         </div>
                     </div>
